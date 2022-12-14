@@ -1,0 +1,73 @@
+const mongoose = require("mongoose");
+
+mongoose.set('strictQuery', true); 
+mongoose.connect('mongodb://127.0.0.1/fruitsDB');
+
+const fruitSchema = new mongoose.Schema({
+    name: String,
+    rating: Number,
+    review: String
+});
+
+const Fruit = mongoose.model("Fruit", fruitSchema);
+
+const fruit = new Fruit({
+    name: "Apple",
+    rating: 7,
+    review: "Taste Good"
+});
+
+//fruit.save(); // save this fruit document into a fruit collection inside fruitsDB, silence it after save it, otherwise will be saved every new run
+
+const orange = new Fruit({
+    name: "Orange",
+    rating: 1,
+    review: "Taste sour"
+});
+const banana = new Fruit({
+    name: "Banana",
+    rating: 2,
+    review: "Taste wired"
+});
+const pear = new Fruit({
+    name: "Pear",
+    rating: 5,
+    review: "Taste ok"
+});
+
+// Fruit.insertMany([orange,banana,pear], function(error){
+//     if (error) {
+//         console.log("Error")
+//     } else {
+//         console.log("Successfully saved")
+//     }
+// })
+
+Fruit.find(function(error, fruits){
+    if(error){console.log(error);}
+    else{for (let index = 0; index < fruits.length; index++) {
+        const fruitName= fruits[index].name;
+        console.log(fruitName);
+        mongoose.connection.close();
+    }}
+})
+
+const peopleSchema = new mongoose.Schema({
+    name: String,
+    age: Number
+});
+
+const People = mongoose.model("People", peopleSchema)
+const people = new People({
+    name:"John",
+    age: 30
+})
+
+// people.save()
+
+People.find(function(error, peoples){
+    if(error){console.log(error);}
+    else(peoples.forEach(function(people){
+        console.log(people.name)
+    }))
+})
